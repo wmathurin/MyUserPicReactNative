@@ -33,9 +33,11 @@ var {
     View,
     Text,
     Image,
+    TouchableHighlight,
     NavigatorIOS
 } = React;
 var forceClient = require('./react.force.net.js');
+var ImagePickerManager = require('NativeModules').ImagePickerManager;
 
 var App = React.createClass({
     render: function() {
@@ -69,6 +71,44 @@ var UserPic = React.createClass({
 
     },
 
+    onChangePic: function() {
+        var options = {
+            cancelButtonTitle: 'Cancel',
+            takePhotoButtonTitle: 'Take Photo...', 
+            chooseFromLibraryButtonTitle: 'Choose from Library...', 
+            cameraType: 'front', 
+            mediaType: 'photo', 
+            maxWidth: 200, 
+            maxHeight: 200, 
+            allowsEditing: true, 
+            noData: true,
+            storageOptions: { 
+                skipBackup: true, 
+                path: 'images' 
+            }
+        };
+
+        ImagePickerManager.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePickerManager Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                var uri = response.uri.replace('file://', '');
+                this.setState({
+                    photoUrl: uri
+                });
+            }
+        });
+    },
+
     render: function() {
         var image = this.state
                      ? (<Image style={styles.photo} source={{uri: this.state.photoUrl}} />)
@@ -77,6 +117,9 @@ var UserPic = React.createClass({
         return (
             <View style={styles.content}>
                 {image}
+                <TouchableHighlight onPress={this.onChangePic}>
+                  <Text>Change</Text>
+                </TouchableHighlight>
             </View>
         );
     },
@@ -89,6 +132,7 @@ var styles = StyleSheet.create({
     },
     content: {
         flex: 1,
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
     },

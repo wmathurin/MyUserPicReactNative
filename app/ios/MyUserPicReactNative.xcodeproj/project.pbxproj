@@ -12,6 +12,7 @@
 		4F8D5EA61B6C0568005E64D4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D5EA51B6C0568005E64D4 /* AppDelegate.m */; };
 		4F8D5EAE1B6C0568005E64D4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F8D5EAD1B6C0568005E64D4 /* Images.xcassets */; };
 		4F8D5EC81B6C0F94005E64D4 /* InitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D5EC71B6C0F94005E64D4 /* InitialViewController.m */; };
+		4FCFD57C1C92353000E1E1BF /* ImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FCFD57B1C92353000E1E1BF /* ImagePickerManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,8 @@
 		4F8D5EAD1B6C0568005E64D4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4F8D5EC61B6C0F94005E64D4 /* InitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitialViewController.h; sourceTree = "<group>"; };
 		4F8D5EC71B6C0F94005E64D4 /* InitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitialViewController.m; sourceTree = "<group>"; };
+		4FCFD57A1C92353000E1E1BF /* ImagePickerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImagePickerManager.h; path = "../../node_modules/react-native-image-picker/ios/ImagePickerManager.h"; sourceTree = "<group>"; };
+		4FCFD57B1C92353000E1E1BF /* ImagePickerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImagePickerManager.m; path = "../../node_modules/react-native-image-picker/ios/ImagePickerManager.m"; sourceTree = "<group>"; };
 		641A79C6255C9F5C2DC614D8 /* Pods-MyUserPicReactNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyUserPicReactNative.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyUserPicReactNative/Pods-MyUserPicReactNative.release.xcconfig"; sourceTree = "<group>"; };
 		90400F35EE8FD2C6D3B8B7E7 /* Pods-MyUserPicReactNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyUserPicReactNative.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyUserPicReactNative/Pods-MyUserPicReactNative.debug.xcconfig"; sourceTree = "<group>"; };
 		E606AE0C7CABF6DAF27DF3CC /* libPods-MyUserPicReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyUserPicReactNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +72,7 @@
 		4F8D5E9F1B6C0568005E64D4 /* MyUserPicReactNative */ = {
 			isa = PBXGroup;
 			children = (
+				4FCFD5791C9234C800E1E1BF /* ImagePicker */,
 				4F8D5ECC1B6C1021005E64D4 /* Classes */,
 				4F8D5EA01B6C0568005E64D4 /* Supporting Files */,
 			);
@@ -94,6 +98,15 @@
 				4F8D5EA51B6C0568005E64D4 /* AppDelegate.m */,
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		4FCFD5791C9234C800E1E1BF /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				4FCFD57A1C92353000E1E1BF /* ImagePickerManager.h */,
+				4FCFD57B1C92353000E1E1BF /* ImagePickerManager.m */,
+			);
+			name = ImagePicker;
 			sourceTree = "<group>";
 		};
 		95FC818BCB0A26B1EC67A6D7 /* Pods */ = {
@@ -227,6 +240,7 @@
 				4F8D5EA61B6C0568005E64D4 /* AppDelegate.m in Sources */,
 				4F8D5EA31B6C0568005E64D4 /* main.m in Sources */,
 				4F8D5EC81B6C0F94005E64D4 /* InitialViewController.m in Sources */,
+				4FCFD57C1C92353000E1E1BF /* ImagePickerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
