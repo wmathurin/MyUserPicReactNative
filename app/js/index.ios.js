@@ -29,9 +29,74 @@
 var React = require('react-native');
 var {
     AppRegistry,
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    NavigatorIOS
 } = React;
+var forceClient = require('./react.force.net.js');
 
-var App = require('./App');
+var App = React.createClass({
+    render: function() {
+        return (
+            <NavigatorIOS
+                style={styles.container}
+                initialRoute={{
+                    title: 'My User Picture',
+                    component: UserPic,
+                }}
+            />
+        );
+    }
+});
+
+var UserPic = React.createClass({
+    componentDidMount: function() {
+        var that = this;
+        forceClient.sendRequest('/services/data', '/v36.0/chatter/users/me', 
+                                function(response) {
+                                    var photoUrl = response.photo.largePhotoUrl;
+                                    that.setState({
+                                        photoUrl: photoUrl
+                                    });
+                                },
+                                function(error) {
+                                }, 
+                                'GET', 
+                                {}, 
+                                {'X-Connect-Bearer-Urls': 'true'});
+
+    },
+
+    render: function() {
+        var image = this.state
+                     ? (<Image style={styles.photo} source={{uri: this.state.photoUrl}} />)
+                     : (<Text>Loading</Text>);
+
+        return (
+            <View style={styles.content}>
+                {image}
+            </View>
+        );
+    },
+});
+
+var styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    content: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    photo: {
+        height:200,
+        width:200,
+    },
+});
 
 AppRegistry.registerComponent('MyUserPicReactNative', () => App);
 
