@@ -39,6 +39,41 @@ var {
 var forceClient = require('./react.force.net.js');
 var ImagePickerManager = require('NativeModules').ImagePickerManager;
 
+var pickPhoto = function(callback) {
+    var options = {
+        cancelButtonTitle: 'Cancel',
+        takePhotoButtonTitle: 'Take Photo...', 
+        chooseFromLibraryButtonTitle: 'Choose from Library...', 
+        cameraType: 'front', 
+        mediaType: 'photo', 
+        maxWidth: 200, 
+        maxHeight: 200, 
+        allowsEditing: true, 
+        noData: true,
+        storageOptions: { 
+            skipBackup: true, 
+            path: 'images' 
+        }
+    };
+
+    ImagePickerManager.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+            console.log('User cancelled image picker');
+        }
+        else if (response.error) {
+            console.log('ImagePickerManager Error: ', response.error);
+        }
+        else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+        }
+        else {
+            callback(response);
+        }
+    });
+};
+
 var App = React.createClass({
     render: function() {
         return (
@@ -54,16 +89,14 @@ var App = React.createClass({
 });
 
 var UserPic = React.createClass({
-    componentDidMount: function() {
-        var that = this;
+    getUserInfo: function(callback) {
         forceClient.sendRequest('/services/data', '/v36.0/chatter/users/me', 
                                 function(response) {
-                                    var photoUrl = response.photo.largePhotoUrl;
-                                    that.setState({
-                                        photoUrl: photoUrl
-                                    });
+                                    console.log(JSON.stringify(response));
+                                    callback(response);
                                 },
                                 function(error) {
+                                    console.log('Failed to get user info:' + error);
                                 }, 
                                 'GET', 
                                 {}, 
@@ -71,41 +104,43 @@ var UserPic = React.createClass({
 
     },
 
+    uploadPhoto: function(localPhotoUrl, callback) {
+        forceClient.sendRequest('/services/data', '/v36.0/connect/user-profiles/' + this.state.userId + '/photo', 
+                                function(response) {
+                                    console.log(JSON.stringify(response));
+                                    callback(response);
+                                },
+                                function(error) {
+                                    console.log('Failed to upload user photo:' + error);
+                                }, 
+                                'POST', 
+                                {}, 
+                                {'X-Connect-Bearer-Urls': 'true'},
+                                {fileUpload: {fileUrl:localPhotoUrl, fileMimeType:'image/jpeg', fileName:'pic.jpg'}}
+                               );
+
+    },
+
+    componentDidMount: function() {
+        var that = this;
+        this.getUserInfo(function(userInfo) {
+            that.setState({
+                userId: userInfo.id,
+                photoUrl: userInfo.photo.largePhotoUrl,
+                photoVersionId: userInfo.photo.photoVersionId
+            });
+        });
+    },
+
     onChangePic: function() {
-        var options = {
-            cancelButtonTitle: 'Cancel',
-            takePhotoButtonTitle: 'Take Photo...', 
-            chooseFromLibraryButtonTitle: 'Choose from Library...', 
-            cameraType: 'front', 
-            mediaType: 'photo', 
-            maxWidth: 200, 
-            maxHeight: 200, 
-            allowsEditing: true, 
-            noData: true,
-            storageOptions: { 
-                skipBackup: true, 
-                path: 'images' 
-            }
-        };
-
-        ImagePickerManager.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePickerManager Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                var uri = response.uri.replace('file://', '');
-                this.setState({
-                    photoUrl: uri
+        var that = this;
+        pickPhoto(function(response) {
+            that.uploadPhoto(response.uri, function(response) {
+                that.setState({
+                    photoUrl: response.largePhotoUrl,
+                    photoVersionId: response.photoVersionId
                 });
-            }
+            });
         });
     },
 
