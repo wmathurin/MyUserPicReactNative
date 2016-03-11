@@ -1,5 +1,5 @@
-# SmartSyncExplorerReactNative
-SmartSyncExplorer application written using React Native
+# MyUserPicReactNative
+Simple application to see and change one's user profile photo.
 
 ## To get started do the following from the root directory
 ``` shell
