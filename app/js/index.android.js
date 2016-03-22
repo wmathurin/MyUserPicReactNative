@@ -31,11 +31,11 @@ var React = require('react-native');
 var {
     AppRegistry,
     StyleSheet,
-    NavigatorIOS
 } = React;
 var UserPic = require('./UserPic.js');
 
 var App = React.createClass({
+    // FIXME
     render: function() {
         return (
             <NavigatorIOS
