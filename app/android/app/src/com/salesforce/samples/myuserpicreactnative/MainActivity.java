@@ -37,6 +37,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.salesforce.androidsdk.reactnative.app.SalesforceReactSDKManager;
 import com.salesforce.androidsdk.rest.RestClient;
 import com.salesforce.androidsdk.ui.SalesforceActivity;
+import com.imagepicker.ImagePickerPackage;
 
 public class MainActivity extends SalesforceActivity implements DefaultHardwareBackBtnHandler {
 
@@ -52,6 +53,7 @@ public class MainActivity extends SalesforceActivity implements DefaultHardwareB
 				.setJSMainModuleName("index.android")
 				.addPackage(new MainReactPackage())
 				.addPackage(SalesforceReactSDKManager.getInstance().getReactPackage())
+                .addPackage(new ImagePickerPackage())
 				.setUseDeveloperSupport(BuildConfig.DEBUG)
 				.setInitialLifecycleState(LifecycleState.RESUMED)
 				.build();

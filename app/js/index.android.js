@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2016, salesforce.com, inc.
  * All rights reserved.
@@ -30,21 +29,44 @@
 var React = require('react-native');
 var {
     AppRegistry,
+    Navigator,
     StyleSheet,
+    Text,
+    View,
 } = React;
 var UserPic = require('./UserPic.js');
 
+
+// Router
+var NavigationBarRouteMapper = {
+    LeftButton: function(route, navigator, index, navState) {
+        return null;
+    },
+    
+    RightButton: function(route, navigator, index, navState) {
+        return null;
+    },
+
+    Title: function(route, navigator, index, navState) {
+        return (<View style={styles.navBarElt}><Text style={styles.navBarTitleText}> {route.name} </Text></View>);
+  },
+
+};
+
 var App = React.createClass({
-    // FIXME
+    renderScene: function(route, navigator) {
+        return (<UserPic />);
+    },
+
     render: function() {
+        var initialRoute = {name: 'My User Picture'};
         return (
-            <NavigatorIOS
-                style={styles.container}
-                initialRoute={{
-                    title: 'My User Picture',
-                    component: UserPic,
-                }}
-            />
+                <Navigator
+                  style={styles.container}
+                  initialRoute={initialRoute}
+                  configureScene={() => Navigator.SceneConfigs.PushFromRight}
+                  renderScene={(route, navigator) => this.renderScene(route, navigator)}
+                  navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />
         );
     }
 });
@@ -53,7 +75,22 @@ var styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-    }
+    },
+    navBar: {
+        backgroundColor: 'red',
+        height: 56,
+    },
+    navBarElt: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems:'center',
+        margin: 2,
+    },
+    navBarTitleText: {
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'bold',
+    },
 });
 
 AppRegistry.registerComponent('MyUserPicReactNative', () => App);
