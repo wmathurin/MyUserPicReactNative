@@ -14,3 +14,6 @@ project( ':libs:SmartSync' ).projectDir = new File( libsRootDir, 'SmartSync' )
 
 include ':libs:SalesforceReact'
 project( ':libs:SalesforceReact' ).projectDir = new File( libsRootDir, 'SalesforceReact' )
+
+include ':react-native-image-picker'
+project(':react-native-image-picker').projectDir = new File(settingsDir, '../node_modules/react-native-image-picker/android')

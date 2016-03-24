@@ -2,6 +2,7 @@ apply plugin: 'android'
 
 dependencies {
     compile project(':libs:SalesforceReact')
+    compile project(':react-native-image-picker')
 }
 
 android {
