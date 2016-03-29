@@ -35,7 +35,7 @@ var {
     View,
 } = React;
 var UserPic = require('./UserPic.js');
-
+var oauth = require('./react.force.oauth.js');
 
 // Router
 var NavigationBarRouteMapper = {
@@ -54,20 +54,37 @@ var NavigationBarRouteMapper = {
 };
 
 var App = React.createClass({
+    getInitialState: function() {
+        return {
+            authenticated: false
+        };
+    },
+    
+    componentDidMount: function() {
+        var that = this;
+        oauth.authenticate(
+            function() {
+                that.setState({authenticated:true});
+            },
+            function(error) {
+                console.log('Failed to authenticate:' + error);
+            }
+        );
+    },
+    
     renderScene: function(route, navigator) {
-        return (<UserPic />);
+        console.log(JSON.stringify(this.state));
+        return this.state.authenticated ?  (<UserPic/>) : (<View/>);
     },
 
     render: function() {
         var initialRoute = {name: 'My User Picture'};
-        return (
-                <Navigator
-                  style={styles.container}
-                  initialRoute={initialRoute}
-                  configureScene={() => Navigator.SceneConfigs.PushFromRight}
-                  renderScene={(route, navigator) => this.renderScene(route, navigator)}
-                  navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />
-        );
+        return (<Navigator
+                style={styles.container}
+                initialRoute={initialRoute}
+                configureScene={() => Navigator.SceneConfigs.PushFromRight}
+                renderScene={(route, navigator) => this.renderScene(route, navigator)}
+                navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />);
     }
 });
 
@@ -94,5 +111,3 @@ var styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('MyUserPicReactNative', () => App);
-
-
