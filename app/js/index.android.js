@@ -71,19 +71,17 @@ var App = React.createClass({
             }
         );
     },
-    
-    renderScene: function(route, navigator) {
-        console.log(JSON.stringify(this.state));
-        return this.state.authenticated ?  (<UserPic/>) : (<View/>);
-    },
 
     render: function() {
+        if (!this.state.authenticated)
+            return (<View/>); // Show splash screen if you have one
+        
         var initialRoute = {name: 'My User Picture'};
         return (<Navigator
                 style={styles.container}
                 initialRoute={initialRoute}
                 configureScene={() => Navigator.SceneConfigs.PushFromRight}
-                renderScene={(route, navigator) => this.renderScene(route, navigator)}
+                renderScene={(route, navigator) => (<UserPic/>)}
                 navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />);
     }
 });
