@@ -47,6 +47,8 @@ static NSString * const OAuthRedirectURI        = @"testsfdc:///mobilesdk/detect
         [SalesforceSDKManager sharedManager].connectedAppId = RemoteAccessConsumerKey;
         [SalesforceSDKManager sharedManager].connectedAppCallbackUri = OAuthRedirectURI;
         [SalesforceSDKManager sharedManager].authScopes = @[ @"web", @"api" ];
+        [SalesforceSDKManager sharedManager].authenticateAtLaunch = NO;
+
         __weak AppDelegate *weakSelf = self;
         [SalesforceSDKManager sharedManager].postLaunchAction = ^(SFSDKLaunchAction launchActionList) {
             //
