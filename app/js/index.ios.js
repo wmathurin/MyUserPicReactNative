@@ -66,6 +66,8 @@ var App = React.createClass({
                 initialRoute={{
                     title: 'My User Picture',
                     component: UserPic,
+                    rightButtonTitle: 'Logout',
+                    onRightButtonPress: () => { oauth.logout(); },		                    
                 }}
             />
         );
