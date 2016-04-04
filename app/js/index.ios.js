@@ -31,18 +31,43 @@ var React = require('react-native');
 var {
     AppRegistry,
     StyleSheet,
-    NavigatorIOS
+    NavigatorIOS,
+    View
 } = React;
 var UserPic = require('./UserPic.js');
+var oauth = require('./react.force.oauth.js');
 
 var App = React.createClass({
+    getInitialState: function() {
+        return {
+            authenticated: false
+        };
+    },
+    
+    componentDidMount: function() {
+        var that = this;
+        oauth.authenticate(
+            function() {
+                that.setState({authenticated:true});
+            },
+            function(error) {
+                console.log('Failed to authenticate:' + error);
+            }
+        );
+    },
+
     render: function() {
+        if (!this.state.authenticated)
+            return (<View/>); // Show splash screen if you have one
+
         return (
             <NavigatorIOS
                 style={styles.container}
                 initialRoute={{
                     title: 'My User Picture',
                     component: UserPic,
+                    rightButtonTitle: 'Logout',
+                    onRightButtonPress: () => { oauth.logout(); },		                    
                 }}
             />
         );

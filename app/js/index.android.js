@@ -32,10 +32,22 @@ var {
     Navigator,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View,
 } = React;
 var UserPic = require('./UserPic.js');
 var oauth = require('./react.force.oauth.js');
+
+// Nav element
+var NavButton = React.createClass({
+    render: function() {
+        return (<View style={styles.navBarElt}>
+                  <TouchableOpacity onPress={() => this.props.onPress()}>
+                    <Text style={styles.navBarText}>{this.props.title}</Text>
+                  </TouchableOpacity>
+                </View>);
+    }
+});
 
 // Router
 var NavigationBarRouteMapper = {
@@ -44,7 +56,7 @@ var NavigationBarRouteMapper = {
     },
     
     RightButton: function(route, navigator, index, navState) {
-        return null;
+        return (<NavButton title="Logout" onPress={() => oauth.logout()} />);
     },
 
     Title: function(route, navigator, index, navState) {
