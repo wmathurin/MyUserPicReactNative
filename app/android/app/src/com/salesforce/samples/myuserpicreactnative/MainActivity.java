@@ -26,6 +26,12 @@
  */
 package com.salesforce.samples.myuserpicreactnative;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -36,6 +42,26 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends SalesforceReactActivity {
+
+    private static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // On N, permissions are granted at run time
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ensurePermission(Manifest.permission.CAMERA);
+            ensurePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void ensurePermission(String permission) {
+        if (this.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {permission}, REQUEST_CODE_ASK_PERMISSIONS);
+        }
+    }
 
     /**
      *
