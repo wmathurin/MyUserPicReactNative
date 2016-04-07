@@ -26,8 +26,8 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+const React = require('react-native');
+const {
     AppRegistry,
     Navigator,
     StyleSheet,
@@ -35,12 +35,14 @@ var {
     TouchableOpacity,
     View,
 } = React;
-var UserPic = require('./UserPic.js');
-var oauth = require('./react.force.oauth.js');
+const UserPic = require('./UserPic.js');
+const oauth = require('./react.force.oauth.js');
+
+const initialRoute = {name: 'My User Picture'};
 
 // Nav element
-var NavButton = React.createClass({
-    render: function() {
+const NavButton = React.createClass({
+    render () {
         return (<View style={styles.navBarElt}>
                   <TouchableOpacity onPress={() => this.props.onPress()}>
                     <Text style={styles.navBarText}>{this.props.title}</Text>
@@ -50,22 +52,53 @@ var NavButton = React.createClass({
 });
 
 // Router
-var NavigationBarRouteMapper = {
-    LeftButton: function(route, navigator, index, navState) {
+const NavigationBarRouteMapper = {
+    LeftButton (route, navigator, index, navState) {
         return null;
     },
     
-    RightButton: function(route, navigator, index, navState) {
+    RightButton (route, navigator, index, navState) {
         return (<NavButton title="Logout" onPress={() => oauth.logout()} />);
     },
 
-    Title: function(route, navigator, index, navState) {
+    Title (route, navigator, index, navState) {
         return (<View style={styles.navBarElt}><Text style={styles.navBarTitleText}> {route.name} </Text></View>);
   },
 
 };
 
-var styles = StyleSheet.create({
+module.exports = React.createClass({
+    getInitialState () {
+        return {
+            authenticated: false
+        };
+    },
+    
+    componentDidMount () {
+        oauth.authenticate(
+            () => {
+                this.setState({authenticated:true});
+            },
+            (error) => {
+                console.log('Failed to authenticate:' + error);
+            }
+        );
+    },
+
+    render () {
+        if (!this.state.authenticated)
+            return (<View/>); // Show splash screen if you have one
+        
+        return (<Navigator
+                style={styles.container}
+                initialRoute={initialRoute}
+                configureScene={() => Navigator.SceneConfigs.PushFromRight}
+                renderScene={(route, navigator) => (<UserPic/>)}
+                navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />);
+    }
+});
+
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
@@ -85,37 +118,4 @@ var styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
-});
-
-module.exports = React.createClass({
-    getInitialState: function() {
-        return {
-            authenticated: false
-        };
-    },
-    
-    componentDidMount: function() {
-        var that = this;
-        oauth.authenticate(
-            function() {
-                that.setState({authenticated:true});
-            },
-            function(error) {
-                console.log('Failed to authenticate:' + error);
-            }
-        );
-    },
-
-    render: function() {
-        if (!this.state.authenticated)
-            return (<View/>); // Show splash screen if you have one
-        
-        var initialRoute = {name: 'My User Picture'};
-        return (<Navigator
-                style={styles.container}
-                initialRoute={initialRoute}
-                configureScene={() => Navigator.SceneConfigs.PushFromRight}
-                renderScene={(route, navigator) => (<UserPic/>)}
-                navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />);
-    }
 });

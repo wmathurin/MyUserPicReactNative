@@ -27,8 +27,8 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+const React = require('react-native');
+const {
     ScrollView,
     RefreshControl,
     StyleSheet,
@@ -37,10 +37,10 @@ var {
     Image,
     TouchableHighlight,
 } = React;
-var forceClient = require('./react.force.net.js');
-var ImagePickerManager = require('NativeModules').ImagePickerManager;
+const forceClient = require('./react.force.net.js');
+const ImagePickerManager = require('NativeModules').ImagePickerManager;
 
-var pickPhoto = function(callback) {
+const pickPhoto = (callback) => {
     var options = {
         cancelButtonTitle: 'Cancel',
         takePhotoButtonTitle: 'Take Photo...', 
@@ -75,7 +75,7 @@ var pickPhoto = function(callback) {
     });
 };
 
-var UserPic = React.createClass({
+module.exports = React.createClass({
 
     getInitialState() {
         return {
@@ -87,39 +87,37 @@ var UserPic = React.createClass({
         this.refreshUserInfo();
     },
 
-    getUserInfo: function(callback) {
+    getUserInfo(callback) {
         forceClient.sendRequest('/services/data', '/v36.0/chatter/users/me', 
-                                function(response) {
-                                    console.log(JSON.stringify(response));
-                                    callback(response);
-                                },
-                                function(error) {
-                                    console.log('Failed to get user info:' + error);
-                                }, 
-                                'GET', 
-                                {}, 
-                                {'X-Connect-Bearer-Urls': 'true'});
-
+            (response) => {
+                callback(response);
+            },
+            (error) => {
+                console.log('Failed to get user info:' + error);
+            }, 
+            'GET', 
+            {}, 
+            {'X-Connect-Bearer-Urls': 'true'}
+        );
     },
 
-    uploadPhoto: function(localPhotoUrl, callback) {
+    uploadPhoto(localPhotoUrl, callback) {
         forceClient.sendRequest('/services/data', '/v36.0/connect/user-profiles/' + this.state.userId + '/photo', 
-                                function(response) {
-                                    console.log(JSON.stringify(response));
-                                    callback(response);
-                                },
-                                function(error) {
-                                    console.log('Failed to upload user photo:' + error);
-                                }, 
-                                'POST', 
-                                {}, 
-                                {'X-Connect-Bearer-Urls': 'true'},
-                                {fileUpload: {fileUrl:localPhotoUrl, fileMimeType:'image/jpeg', fileName:'pic.jpg'}}
-                               );
+            (response) => {
+                callback(response);
+            },
+            (error) => {
+                console.log('Failed to upload user photo:' + error);
+            }, 
+            'POST', 
+            {}, 
+            {'X-Connect-Bearer-Urls': 'true'},
+            {fileUpload: {fileUrl:localPhotoUrl, fileMimeType:'image/jpeg', fileName:'pic.jpg'}}
+       );
 
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.refreshUserInfo();
     },
 
@@ -135,11 +133,10 @@ var UserPic = React.createClass({
         });
     },
 
-    onChangePic: function() {
-        var that = this;
-        pickPhoto(function(response) {
-            that.uploadPhoto(response.uri, function(response) {
-                that.setState({
+    onChangePic() {
+        pickPhoto((response) => {
+            this.uploadPhoto(response.uri, (response) => {
+                this.setState({
                     photoUrl: response.largePhotoUrl,
                     photoVersionId: response.photoVersionId
                 });
@@ -147,7 +144,7 @@ var UserPic = React.createClass({
         });
     },
 
-    render: function() {
+    render() {
         return (
             <View style={styles.container}>
             <ScrollView style={styles.scroll}
@@ -171,7 +168,7 @@ var UserPic = React.createClass({
     },
 });
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
         flex: 1,
         paddingTop:100
@@ -191,6 +188,3 @@ var styles = StyleSheet.create({
         width:200,
     },
 });
-
-module.exports = UserPic;
-
