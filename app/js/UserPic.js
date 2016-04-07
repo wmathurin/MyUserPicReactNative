@@ -29,6 +29,7 @@
 
 var React = require('react-native');
 var {
+    ScrollView,
     StyleSheet,
     View,
     Text,
@@ -135,22 +136,34 @@ var UserPic = React.createClass({
                      : (<Text>Loading</Text>);
 
         return (
+            <View style={styles.container}>
+            <ScrollView style={styles.scroll}>
             <View style={styles.content}>
                 {image}
                 <TouchableHighlight onPress={this.onChangePic}>
                   <Text>Change</Text>
                 </TouchableHighlight>
             </View>
+            </ScrollView>
+            </View>
         );
     },
 });
 
 var styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        paddingTop:100
+    },
     content: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    scroll: {
+        flex: 1,
+        flexDirection: 'column',
     },
     photo: {
         height:200,
