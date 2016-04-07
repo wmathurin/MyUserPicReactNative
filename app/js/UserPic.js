@@ -80,7 +80,7 @@ var UserPic = React.createClass({
     getInitialState() {
         return {
           refreshing: false
-        }
+        };
     },
 
     onRefresh() {

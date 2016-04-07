@@ -26,98 +26,11 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+const React = require('react-native');
+const {
     AppRegistry,
-    Navigator,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
 } = React;
-var UserPic = require('./UserPic.js');
-var oauth = require('./react.force.oauth.js');
 
-// Nav element
-var NavButton = React.createClass({
-    render: function() {
-        return (<View style={styles.navBarElt}>
-                  <TouchableOpacity onPress={() => this.props.onPress()}>
-                    <Text style={styles.navBarText}>{this.props.title}</Text>
-                  </TouchableOpacity>
-                </View>);
-    }
-});
-
-// Router
-var NavigationBarRouteMapper = {
-    LeftButton: function(route, navigator, index, navState) {
-        return null;
-    },
-    
-    RightButton: function(route, navigator, index, navState) {
-        return (<NavButton title="Logout" onPress={() => oauth.logout()} />);
-    },
-
-    Title: function(route, navigator, index, navState) {
-        return (<View style={styles.navBarElt}><Text style={styles.navBarTitleText}> {route.name} </Text></View>);
-  },
-
-};
-
-var App = React.createClass({
-    getInitialState: function() {
-        return {
-            authenticated: false
-        };
-    },
-    
-    componentDidMount: function() {
-        var that = this;
-        oauth.authenticate(
-            function() {
-                that.setState({authenticated:true});
-            },
-            function(error) {
-                console.log('Failed to authenticate:' + error);
-            }
-        );
-    },
-
-    render: function() {
-        if (!this.state.authenticated)
-            return (<View/>); // Show splash screen if you have one
-        
-        var initialRoute = {name: 'My User Picture'};
-        return (<Navigator
-                style={styles.container}
-                initialRoute={initialRoute}
-                configureScene={() => Navigator.SceneConfigs.PushFromRight}
-                renderScene={(route, navigator) => (<UserPic/>)}
-                navigationBar={<Navigator.NavigationBar routeMapper={NavigationBarRouteMapper} style={styles.navBar} />} />);
-    }
-});
-
-var styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
-    navBar: {
-        backgroundColor: 'red',
-        height: 56,
-    },
-    navBarElt: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems:'center',
-        margin: 2,
-    },
-    navBarTitleText: {
-        fontSize: 20,
-        color: 'white',
-        fontWeight: 'bold',
-    },
-});
+const App = require('./App');
 
 AppRegistry.registerComponent('MyUserPicReactNative', () => App);
