@@ -3,6 +3,9 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url 'http://jcenter.bintray.com'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
