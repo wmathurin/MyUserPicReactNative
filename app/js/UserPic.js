@@ -84,10 +84,7 @@ var UserPic = React.createClass({
     },
 
     onRefresh() {
-        this.setState({refreshing: true});
-        setTimeout(()=>{
-            this.setState({refreshing: false});
-        },2000);
+        this.refreshUserInfo();
     },
 
     getUserInfo: function(callback) {
@@ -123,12 +120,17 @@ var UserPic = React.createClass({
     },
 
     componentDidMount: function() {
-        var that = this;
-        this.getUserInfo(function(userInfo) {
-            that.setState({
+        this.refreshUserInfo();
+    },
+
+    refreshUserInfo() {
+        this.setState({refreshing: true});
+        this.getUserInfo((userInfo) => {
+            this.setState({
                 userId: userInfo.id,
                 photoUrl: userInfo.photo.largePhotoUrl,
-                photoVersionId: userInfo.photo.photoVersionId
+                photoVersionId: userInfo.photo.photoVersionId,
+                refreshing: false
             });
         });
     },
