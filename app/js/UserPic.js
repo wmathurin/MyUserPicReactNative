@@ -146,10 +146,6 @@ var UserPic = React.createClass({
     },
 
     render: function() {
-        var image = this.state
-                     ? (<Image style={styles.photo} source={{uri: this.state.photoUrl}} />)
-                     : (<Text>Loading</Text>);
-
         return (
             <View style={styles.container}>
             <ScrollView style={styles.scroll}
@@ -161,7 +157,8 @@ var UserPic = React.createClass({
                 }
             >
             <View style={styles.content}>
-                {image}
+                { this.state.photoUrl?<Image style={styles.photo} source={{uri: this.state.photoUrl}} />
+                    :<Text>Loading</Text> }
                 <TouchableHighlight onPress={this.onChangePic}>
                   <Text>Change</Text>
                 </TouchableHighlight>
