@@ -30,6 +30,7 @@
 var React = require('react-native');
 var {
     ScrollView,
+    RefreshControl,
     StyleSheet,
     View,
     Text,
@@ -75,6 +76,20 @@ var pickPhoto = function(callback) {
 };
 
 var UserPic = React.createClass({
+
+    getInitialState() {
+        return {
+          refreshing: false
+        }
+    },
+
+    onRefresh() {
+        this.setState({refreshing: true});
+        setTimeout(()=>{
+            this.setState({refreshing: false});
+        },2000);
+    },
+
     getUserInfo: function(callback) {
         forceClient.sendRequest('/services/data', '/v36.0/chatter/users/me', 
                                 function(response) {
@@ -137,7 +152,14 @@ var UserPic = React.createClass({
 
         return (
             <View style={styles.container}>
-            <ScrollView style={styles.scroll}>
+            <ScrollView style={styles.scroll}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh}
+                    />
+                }
+            >
             <View style={styles.content}>
                 {image}
                 <TouchableHighlight onPress={this.onChangePic}>
