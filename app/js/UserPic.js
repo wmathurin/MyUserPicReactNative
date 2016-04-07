@@ -41,7 +41,7 @@ const forceClient = require('./react.force.net.js');
 const ImagePickerManager = require('NativeModules').ImagePickerManager;
 
 const pickPhoto = (callback) => {
-    var options = {
+    const options = {
         cancelButtonTitle: 'Cancel',
         takePhotoButtonTitle: 'Take Photo...', 
         chooseFromLibraryButtonTitle: 'Choose from Library...', 
