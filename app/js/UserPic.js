@@ -27,19 +27,21 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+const React = require('react-native');
+const {
+    ScrollView,
+    RefreshControl,
     StyleSheet,
     View,
     Text,
     Image,
     TouchableHighlight,
 } = React;
-var forceClient = require('./react.force.net.js');
-var ImagePickerManager = require('NativeModules').ImagePickerManager;
+const forceClient = require('./react.force.net.js');
+const ImagePickerManager = require('NativeModules').ImagePickerManager;
 
-var pickPhoto = function(callback) {
-    var options = {
+const pickPhoto = (callback) => {
+    const options = {
         cancelButtonTitle: 'Cancel',
         takePhotoButtonTitle: 'Take Photo...', 
         chooseFromLibraryButtonTitle: 'Choose from Library...', 
@@ -73,55 +75,68 @@ var pickPhoto = function(callback) {
     });
 };
 
-var UserPic = React.createClass({
-    getUserInfo: function(callback) {
+module.exports = React.createClass({
+
+    getInitialState() {
+        return {
+          refreshing: false
+        };
+    },
+
+    onRefresh() {
+        this.refreshUserInfo();
+    },
+
+    getUserInfo(callback) {
         forceClient.sendRequest('/services/data', '/v36.0/chatter/users/me', 
-                                function(response) {
-                                    console.log(JSON.stringify(response));
-                                    callback(response);
-                                },
-                                function(error) {
-                                    console.log('Failed to get user info:' + error);
-                                }, 
-                                'GET', 
-                                {}, 
-                                {'X-Connect-Bearer-Urls': 'true'});
-
+            (response) => {
+                callback(response);
+            },
+            (error) => {
+                console.log('Failed to get user info:' + error);
+            }, 
+            'GET', 
+            {}, 
+            {'X-Connect-Bearer-Urls': 'true'}
+        );
     },
 
-    uploadPhoto: function(localPhotoUrl, callback) {
+    uploadPhoto(localPhotoUrl, callback) {
         forceClient.sendRequest('/services/data', '/v36.0/connect/user-profiles/' + this.state.userId + '/photo', 
-                                function(response) {
-                                    console.log(JSON.stringify(response));
-                                    callback(response);
-                                },
-                                function(error) {
-                                    console.log('Failed to upload user photo:' + error);
-                                }, 
-                                'POST', 
-                                {}, 
-                                {'X-Connect-Bearer-Urls': 'true'},
-                                {fileUpload: {fileUrl:localPhotoUrl, fileMimeType:'image/jpeg', fileName:'pic.jpg'}}
-                               );
+            (response) => {
+                callback(response);
+            },
+            (error) => {
+                console.log('Failed to upload user photo:' + error);
+            }, 
+            'POST', 
+            {}, 
+            {'X-Connect-Bearer-Urls': 'true'},
+            {fileUpload: {fileUrl:localPhotoUrl, fileMimeType:'image/jpeg', fileName:'pic.jpg'}}
+       );
 
     },
 
-    componentDidMount: function() {
-        var that = this;
-        this.getUserInfo(function(userInfo) {
-            that.setState({
+    componentDidMount() {
+        this.refreshUserInfo();
+    },
+
+    refreshUserInfo() {
+        this.setState({refreshing: true});
+        this.getUserInfo((userInfo) => {
+            this.setState({
                 userId: userInfo.id,
                 photoUrl: userInfo.photo.largePhotoUrl,
-                photoVersionId: userInfo.photo.photoVersionId
+                photoVersionId: userInfo.photo.photoVersionId,
+                refreshing: false
             });
         });
     },
 
-    onChangePic: function() {
-        var that = this;
-        pickPhoto(function(response) {
-            that.uploadPhoto(response.uri, function(response) {
-                that.setState({
+    onChangePic() {
+        pickPhoto((response) => {
+            this.uploadPhoto(response.uri, (response) => {
+                this.setState({
                     photoUrl: response.largePhotoUrl,
                     photoVersionId: response.photoVersionId
                 });
@@ -129,34 +144,47 @@ var UserPic = React.createClass({
         });
     },
 
-    render: function() {
-        var image = this.state
-                     ? (<Image style={styles.photo} source={{uri: this.state.photoUrl}} />)
-                     : (<Text>Loading</Text>);
-
+    render() {
         return (
+            <View style={styles.container}>
+            <ScrollView style={styles.scroll}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh}
+                    />
+                }
+            >
             <View style={styles.content}>
-                {image}
+                { this.state.photoUrl?<Image style={styles.photo} source={{uri: this.state.photoUrl}} />
+                    :<Text>Loading</Text> }
                 <TouchableHighlight onPress={this.onChangePic}>
                   <Text>Change</Text>
                 </TouchableHighlight>
+            </View>
+            </ScrollView>
             </View>
         );
     },
 });
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        paddingTop:100
+    },
     content: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
     },
+    scroll: {
+        flex: 1,
+        flexDirection: 'column',
+    },
     photo: {
         height:200,
         width:200,
     },
 });
-
-module.exports = UserPic;
-
