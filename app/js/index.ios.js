@@ -27,10 +27,10 @@
 
 'use strict';
 
-const React = require('react-native');
-const {
+import React from 'react';
+import {
     AppRegistry,
-} = React;
+} from 'react-native';
 
 const App = require('./App');
 

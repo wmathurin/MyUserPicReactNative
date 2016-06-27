@@ -26,10 +26,18 @@
 
 'use strict';
 
-const React = require('react-native');
-const {
+import React from 'react';
+import {
     AppRegistry,
-} = React;
+    Navigator,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+
+var UserPic = require('./UserPic.js');
+var oauth = require('./react.force.oauth.js');
 
 const App = require('./App');
 

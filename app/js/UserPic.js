@@ -27,8 +27,8 @@
 
 'use strict';
 
-const React = require('react-native');
-const {
+import React from 'react';
+import {
     ScrollView,
     RefreshControl,
     StyleSheet,
@@ -36,9 +36,10 @@ const {
     Text,
     Image,
     TouchableHighlight,
-} = React;
-const forceClient = require('./react.force.net.js');
-const ImagePickerManager = require('NativeModules').ImagePickerManager;
+} from 'react-native';
+
+var forceClient = require('./react.force.net.js');
+var ImagePickerManager = require('NativeModules').ImagePickerManager;
 
 const pickPhoto = (callback) => {
     const options = {
