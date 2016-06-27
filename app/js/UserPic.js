@@ -27,14 +27,15 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
     StyleSheet,
     View,
     Text,
     Image,
     TouchableHighlight,
-} = React;
+} from 'react-native';
+
 var forceClient = require('./react.force.net.js');
 var ImagePickerManager = require('NativeModules').ImagePickerManager;
 
