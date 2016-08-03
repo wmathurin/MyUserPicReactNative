@@ -28,14 +28,43 @@ package com.salesforce.samples.myuserpicreactnative;
 
 import android.app.Application;
 
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.salesforce.androidsdk.app.SalesforceSDKManager;
 import com.salesforce.androidsdk.reactnative.app.SalesforceReactSDKManager;
 import com.salesforce.androidsdk.security.Encryptor;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Application class for our application.
  */
-public class MyUserPicReactNativeApp extends Application {
+public class MyUserPicReactNativeApp extends Application implements ReactApplication {
+
+	private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+		@Override
+		protected boolean getUseDeveloperSupport() {
+			return BuildConfig.DEBUG;
+		}
+
+		@Override
+		protected List<ReactPackage> getPackages() {
+			return Arrays.asList(
+					new MainReactPackage(),
+					SalesforceReactSDKManager.getInstance().getReactPackage(),
+					new ImagePickerPackage()
+			);
+		}
+	};
+
+	@Override
+	public ReactNativeHost getReactNativeHost() {
+		return mReactNativeHost;
+	}
 
 	@Override
 	public void onCreate() {
