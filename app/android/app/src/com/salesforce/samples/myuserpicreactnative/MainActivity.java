@@ -75,13 +75,4 @@ public class MainActivity extends SalesforceReactActivity {
 		return "MyUserPicReactNative";
 	}
 
-	/**
-	 * Returns whether dev mode should be enabled.
-	 * This enables e.g. the dev menu.
-	 */
-	@Override
-	protected boolean getUseDeveloperSupport() {
-		return BuildConfig.DEBUG;
-	}
-
 }
