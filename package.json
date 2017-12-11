@@ -1,0 +1,29 @@
+{
+    "name": "MyUserPicReactNative",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node node_modules/react-native/local-cli/cli.js start",
+        "test": "jest"
+    },
+    "sdkDependencies": {
+        "SalesforceMobileSDK-Android": "https://github.com/forcedotcom/SalesforceMobileSDK-Android.git#dev",
+        "SalesforceMobileSDK-iOS": "https://github.com/forcedotcom/SalesforceMobileSDK-iOS.git#dev"
+    },
+    "dependencies": {
+        "react": "16.0.0",
+        "react-native": "0.50.4",
+        "react-native-force": "https://github.com/forcedotcom/SalesforceMobileSDK-ReactNative.git#dev",
+        "react-navigation": "^1.0.0-beta.11"
+    },
+    "jest": {
+        "preset": "jest-react-native"
+    },
+    "devDependencies": {
+        "babel-jest": "16.0.0",
+        "babel-preset-react-native": "1.9.1",
+        "jest": "19.0.2",
+        "jest-react-native": "16.0.0",
+        "react-test-renderer": "16.0.0"
+    }
+}
