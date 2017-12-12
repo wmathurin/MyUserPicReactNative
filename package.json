@@ -11,11 +11,11 @@
         "SalesforceMobileSDK-iOS": "https://github.com/forcedotcom/SalesforceMobileSDK-iOS.git#dev"
     },
     "dependencies": {
-        "react": "16.0.0",
-        "react-native": "0.50.4",
-        "react-native-force": "https://github.com/forcedotcom/SalesforceMobileSDK-ReactNative.git#dev",
+        "react": "^16.0.0",
+        "react-native": "^0.50.4",
+        "react-native-force": "git+https://github.com/forcedotcom/SalesforceMobileSDK-ReactNative.git#dev",
         "react-native-image-picker": "^0.26.7",
-        "react-navigation": "^1.0.0-beta.11"
+        "react-navigation": "^1.0.0-beta.21"
     },
     "jest": {
         "preset": "jest-react-native"
