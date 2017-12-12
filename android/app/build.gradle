@@ -87,7 +87,7 @@ android {
     buildToolsVersion '26.0.2'
 
     defaultConfig {
-        applicationId "com.salesforce.reactnativetemplate"
+        applicationId "com.salesforce.samples.myuserpicreactnative"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
