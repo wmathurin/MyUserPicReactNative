@@ -32,6 +32,7 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.salesforce.androidsdk.analytics.security.Encryptor;
 import com.salesforce.androidsdk.app.SalesforceSDKManager;
 import com.salesforce.androidsdk.reactnative.app.SalesforceReactSDKManager;
@@ -54,7 +55,8 @@ public class MainApplication extends Application implements ReactApplication {
 		protected List<ReactPackage> getPackages() {
 			return Arrays.asList(
 					new MainReactPackage(),
-					SalesforceReactSDKManager.getInstance().getReactPackage()
+					SalesforceReactSDKManager.getInstance().getReactPackage(),
+					new ImagePickerPackage()
 			);
 		}
 

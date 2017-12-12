@@ -130,6 +130,7 @@ dependencies {
     api "com.android.support:appcompat-v7:25.2.0"
     api "com.facebook.react:react-native:+"  // From node_modules
     api project(':libs:SalesforceReact') // From node_modules
+    compile project(':react-native-image-picker')
 }
 
 // Run this once to be able to run the application with BUCK
