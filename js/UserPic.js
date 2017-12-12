@@ -1,6 +1,5 @@
-
 /*
- * Copyright (c) 2016, salesforce.com, inc.
+ * Copyright (c) 2016-present, salesforce.com, inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided
@@ -25,10 +24,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use strict';
-
 import React from 'react';
 import {
+    Alert,
     ScrollView,
     RefreshControl,
     StyleSheet,
@@ -38,8 +36,9 @@ import {
     TouchableHighlight,
 } from 'react-native';
 
-var forceClient = require('./react.force.net.js');
-var ImagePickerManager = require('NativeModules').ImagePickerManager;
+import { net } from 'react-native-force';
+import { showImagePicker } from 'react-native-image-picker';
+var createReactClass = require('create-react-class');
 
 const pickPhoto = (callback) => {
     const options = {
@@ -58,17 +57,19 @@ const pickPhoto = (callback) => {
         }
     };
 
-    ImagePickerManager.showImagePicker(options, (response) => {
-        console.log('Response = ', response);
+    console.log("Showing image picker");
+    
+    showImagePicker(options, (response) => {
+        console.log('Response = ' +  response);
 
         if (response.didCancel) {
             console.log('User cancelled image picker');
         }
         else if (response.error) {
-            console.log('ImagePickerManager Error: ', response.error);
+            console.log('ImagePicker Error: ' + response.error);
         }
         else if (response.customButton) {
-            console.log('User tapped custom button: ', response.customButton);
+            console.log('User tapped custom button: ' +  response.customButton);
         }
         else {
             callback(response);
@@ -76,7 +77,10 @@ const pickPhoto = (callback) => {
     });
 };
 
-module.exports = React.createClass({
+const UserPicScreen = createReactClass({
+    navigationOptions: {
+        title: 'User Photo Picker'
+    },
 
     getInitialState() {
         return {
@@ -89,7 +93,7 @@ module.exports = React.createClass({
     },
 
     getUserInfo(callback) {
-        forceClient.sendRequest('/services/data', '/v36.0/chatter/users/me', 
+        net.sendRequest('/services/data', '/v36.0/chatter/users/me', 
             (response) => {
                 callback(response);
             },
@@ -103,7 +107,7 @@ module.exports = React.createClass({
     },
 
     uploadPhoto(localPhotoUrl, callback) {
-        forceClient.sendRequest('/services/data', '/v36.0/connect/user-profiles/' + this.state.userId + '/photo', 
+        net.sendRequest('/services/data', '/v36.0/connect/user-profiles/' + this.state.userId + '/photo', 
             (response) => {
                 callback(response);
             },
@@ -135,6 +139,7 @@ module.exports = React.createClass({
     },
 
     onChangePic() {
+        console.log("Here");
         pickPhoto((response) => {
             this.uploadPhoto(response.uri, (response) => {
                 this.setState({
@@ -166,7 +171,7 @@ module.exports = React.createClass({
             </ScrollView>
             </View>
         );
-    },
+    }
 });
 
 const styles = StyleSheet.create({
@@ -189,3 +194,5 @@ const styles = StyleSheet.create({
         width:200,
     },
 });
+
+export default UserPicScreen;
