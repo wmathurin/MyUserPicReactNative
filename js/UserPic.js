@@ -93,7 +93,7 @@ const UserPicScreen = createReactClass({
     },
 
     getUserInfo(callback) {
-        net.sendRequest('/services/data', '/v36.0/chatter/users/me', 
+        net.sendRequest('/services/data', '/v41.0/chatter/users/me', 
             (response) => {
                 callback(response);
             },
@@ -107,7 +107,7 @@ const UserPicScreen = createReactClass({
     },
 
     uploadPhoto(localPhotoUrl, callback) {
-        net.sendRequest('/services/data', '/v36.0/connect/user-profiles/' + this.state.userId + '/photo', 
+        net.sendRequest('/services/data', '/v41.0/connect/user-profiles/' + this.state.userId + '/photo', 
             (response) => {
                 callback(response);
             },
